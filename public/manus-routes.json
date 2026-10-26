@@ -1,0 +1,19 @@
+{
+  "routes": [
+    { "path": "/", "title": "OFS Pad" },
+    { "path": "/auth", "title": "Sign in to OFS Pad" },
+    { "path": "/student", "title": "Student dashboard" },
+    { "path": "/student/notebooks", "title": "Student notebooks" },
+    { "path": "/student/notebooks/:id", "title": "Notebook editor" },
+    { "path": "/student/assignments", "title": "Student assignments" },
+    { "path": "/student/doubts", "title": "Student doubts" },
+    { "path": "/student/announcements", "title": "Student announcements" },
+    { "path": "/student/planner", "title": "Student planner" },
+    { "path": "/teacher", "title": "Teacher dashboard" },
+    { "path": "/teacher/classes", "title": "Teacher classes" },
+    { "path": "/teacher/assignments", "title": "Teacher assignments" },
+    { "path": "/teacher/exams", "title": "Teacher exams" },
+    { "path": "/teacher/doubts", "title": "Teacher doubts" },
+    { "path": "/teacher/announcements", "title": "Teacher announcements" }
+  ]
+}

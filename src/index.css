@@ -1,0 +1,48 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    color-scheme: light;
+  }
+
+  html {
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  body {
+    font-family: 'Inter', system-ui, sans-serif;
+    background-color: theme('colors.paper.DEFAULT');
+    color: theme('colors.ink.DEFAULT');
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Nunito', system-ui, sans-serif;
+  }
+
+  /* Hide scrollbar utility */
+  .no-scrollbar::-webkit-scrollbar { display: none; }
+  .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+}
+
+@layer components {
+  /* Notebook ruled-page texture with red margin line */
+  .notebook-page {
+    background-image:
+      linear-gradient(to bottom, transparent 0px, transparent 27px, rgba(43, 76, 126, 0.08) 27px, rgba(43, 76, 126, 0.08) 28px);
+    background-size: 100% 28px;
+    background-position: 0 8px;
+  }
+  .notebook-margin {
+    background-image: linear-gradient(to right, rgba(209, 73, 91, 0.25) 48px, transparent 48px);
+  }
+
+  .dark .notebook-page {
+    background-image:
+      linear-gradient(to bottom, transparent 0px, transparent 27px, rgba(180, 200, 240, 0.10) 27px, rgba(180, 200, 240, 0.10) 28px);
+  }
+  .dark .notebook-margin {
+    background-image: linear-gradient(to right, rgba(220, 130, 140, 0.30) 48px, transparent 48px);
+  }
+}

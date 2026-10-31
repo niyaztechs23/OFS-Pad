@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useSearchParams, Link } from 'react-router-dom';
 import { Logo } from '@/components/Logo';
 import { Button } from '@/components/ui/Button';
-import { GraduationCap, Briefcase, ArrowLeft, Mail, Lock, User, KeyRound } from 'lucide-react';
+import { ArrowLeft, Mail, Lock, User, KeyRound } from 'lucide-react';
 import { supabase } from '@/lib/supabase';
 import { useAuth } from '@/components/auth/AuthProvider';
 
@@ -12,7 +12,10 @@ export function AuthPage() {
   const [params] = useSearchParams();
   const { session } = useAuth();
   const [mode, setMode] = useState<'login' | 'signup'>(params.get('mode') === 'signup' ? 'signup' : 'login');
-  const [role, setRole] = useState<Role>('student');
+  // Teacher onboarding is intentionally unlisted. Authorized staff use a private
+  // invitation URL with `?mode=signup&role=teacher`; the invite code and Supabase
+  // policies remain the real access control.
+  const [role] = useState<Role>(params.get('role') === 'teacher' ? 'teacher' : 'student');
   const [fullName, setFullName] = useState('');
   const [teacherInviteCode, setTeacherInviteCode] = useState('');
   const [email, setEmail] = useState('');
@@ -104,34 +107,6 @@ export function AuthPage() {
             ))}
           </div>
 
-          {/* Role selector */}
-          <div className="grid grid-cols-2 gap-3 mb-6">
-            {([
-              { key: 'student', label: 'Student', icon: GraduationCap, desc: 'I study here' },
-                  { key: 'teacher', label: 'Teacher', icon: Briefcase, desc: 'Invitation required' },
-            ] as const).map((r) => {
-              const Icon = r.icon;
-              const active = role === r.key;
-              return (
-                <button
-                  key={r.key}
-                  onClick={() => setRole(r.key as Role)}
-                  className={`rounded-xl border-2 p-4 text-left transition-all min-h-[44px] ${
-                    active
-                      ? 'border-ink-500 bg-ink-50 dark:bg-ink-700 dark:border-ink-300'
-                      : 'border-ink-100 dark:border-ink-700 hover:border-ink-200 dark:hover:border-ink-600'
-                  }`}
-                >
-                  <span className={`w-9 h-9 grid place-items-center rounded-lg mb-2 ${active ? 'bg-ink-500 text-white' : 'bg-ink-100 text-ink-400 dark:bg-ink-700 dark:text-ink-200'}`}>
-                    <Icon size={18} />
-                  </span>
-                  <p className={`font-heading font-bold text-sm ${active ? 'text-ink-600 dark:text-white' : 'text-ink-400 dark:text-ink-200'}`}>{r.label}</p>
-                  <p className="text-xs text-ink-300 dark:text-ink-300">{r.desc}</p>
-                </button>
-              );
-            })}
-          </div>
-
           <form onSubmit={submit} className="space-y-4">
             {mode === 'signup' && (
               <Field
@@ -147,7 +122,7 @@ export function AuthPage() {
             {mode === 'signup' && role === 'teacher' && (
               <Field
                 icon={<KeyRound size={18} />}
-                label="Teacher invitation code"
+                label="Invitation code"
                 placeholder="Code from your school administrator"
                 type="text"
                 value={teacherInviteCode}

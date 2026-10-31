@@ -61,7 +61,7 @@ export function LandingPage() {
           </h1>
           <p className="mt-5 text-lg text-ink-400 dark:text-ink-200 max-w-md">
             OFS Pad brings your assignments, doubts and subject notes into one tidy place —
-            built for school students and teachers.
+            built for focused school study.
           </p>
           <div className="mt-7 flex flex-wrap gap-3">
             <Link to="/auth?mode=signup">
@@ -83,7 +83,7 @@ export function LandingPage() {
               <span className="text-xs text-ink-300 dark:text-ink-200">Live class activity</span>
             </div>
             <ul className="space-y-2.5">
-              {['Assignments from your classes', 'Teacher announcements', 'Notes and answered doubts'].map((row, i) => (
+              {['Assignments from your classes', 'Classroom updates', 'Notes and answered doubts'].map((row, i) => (
                 <li key={row} className="flex items-center gap-3 rounded-xl bg-paper-warm/70 dark:bg-ink-700/40 p-3">
                   <span className={`w-2.5 h-2.5 rounded-full ${['bg-subjInk-maths', 'bg-subjInk-science', 'bg-subjInk-computer'][i]}`} />
                   <span className="text-sm text-ink-600 dark:text-white font-medium flex-1">{row}</span>

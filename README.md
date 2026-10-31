@@ -47,13 +47,13 @@ The migration `supabase/migrations/20261025194500_exams.sql` adds the real `exam
 
 ## Teacher account access
 
-Teacher registration is invitation-only. The signup form asks for a teacher invitation code, and the Supabase Auth trigger independently verifies that the code matches the signup email, is unused and has not expired. A student cannot create a teacher account by changing browser fields or request metadata.
+Teacher registration is invitation-only and email-approved. The public signup screen does not expose teacher onboarding. An authorized school administrator approves a teacher email in Supabase, then shares the private signup URL `/auth?mode=signup&role=teacher`. The Supabase Auth trigger independently verifies that the email is approved, unused and not expired before assigning the `teacher` role. A student cannot create a teacher account by changing browser fields or request metadata.
 
-To issue an invitation, an authorized school administrator can run this in the Supabase SQL editor:
+To approve a teacher, an authorized school administrator can run this in the Supabase SQL editor:
 
 ```sql
-insert into public.teacher_invites (email, invite_code, expires_at)
-values ('teacher@school.edu', 'replace-with-a-random-code', now() + interval '7 days');
+insert into public.teacher_invites (email, expires_at)
+values ('teacher@school.edu', now() + interval '7 days');
 ```
 
-The code must be sent privately to the intended teacher and should not be committed to the app.
+The teacher must sign up with the approved email. After successful authentication, the role-protected teacher workflow becomes available automatically. Configure Supabase email confirmation for production so only the owner of the approved email can activate the account.

@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useSearchParams, Link } from 'react-router-dom';
 import { Logo } from '@/components/Logo';
 import { Button } from '@/components/ui/Button';
-import { ArrowLeft, Mail, Lock, User, KeyRound } from 'lucide-react';
+import { ArrowLeft, Mail, Lock, User } from 'lucide-react';
 import { supabase } from '@/lib/supabase';
 import { useAuth } from '@/components/auth/AuthProvider';
 
@@ -13,11 +13,10 @@ export function AuthPage() {
   const { session } = useAuth();
   const [mode, setMode] = useState<'login' | 'signup'>(params.get('mode') === 'signup' ? 'signup' : 'login');
   // Teacher onboarding is intentionally unlisted. Authorized staff use a private
-  // invitation URL with `?mode=signup&role=teacher`; the invite code and Supabase
-  // policies remain the real access control.
+  // invitation URL with `?mode=signup&role=teacher`; the approved email and
+  // Supabase policies remain the real access control.
   const [role] = useState<Role>(params.get('role') === 'teacher' ? 'teacher' : 'student');
   const [fullName, setFullName] = useState('');
-  const [teacherInviteCode, setTeacherInviteCode] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState<string | null>(null);
@@ -32,8 +31,8 @@ export function AuthPage() {
     if (/already.*registered|already.*in use/i.test(msg)) return 'An account with this email already exists. Try logging in.';
     if (/invalid.*credentials|invalid.*login/i.test(msg)) return 'Email or password is incorrect.';
     if (/rate limit|over.*request/i.test(msg)) return 'Too many attempts. Please wait a moment and try again.';
-    if (/teacher invitation/i.test(msg)) return 'Teacher accounts require a valid invitation issued to this email address.';
-    if (role === 'teacher' && /database error saving new user/i.test(msg)) return 'Teacher accounts require a valid invitation issued to this email address.';
+    if (/teacher invitation|approved teacher email/i.test(msg)) return 'This email is not approved for teacher access.';
+    if (role === 'teacher' && /database error saving new user/i.test(msg)) return 'This email is not approved for teacher access.';
     return msg;
   };
 
@@ -48,15 +47,10 @@ export function AuthPage() {
           setBusy(false);
           return;
         }
-        if (role === 'teacher' && !teacherInviteCode.trim()) {
-          setError('Teacher accounts require an invitation code from your school administrator.');
-          setBusy(false);
-          return;
-        }
         const { error: err } = await supabase.auth.signUp({
           email,
           password,
-          options: { data: { full_name: fullName.trim(), role, teacher_invite_code: role === 'teacher' ? teacherInviteCode.trim() : null } },
+          options: { data: { full_name: fullName.trim(), role } },
         });
         if (err) throw err;
         // Email confirmation is off; onAuthStateChange will fire and trigger redirect
@@ -116,17 +110,6 @@ export function AuthPage() {
                 type="text"
                 value={fullName}
                 onChange={setFullName}
-                required
-              />
-            )}
-            {mode === 'signup' && role === 'teacher' && (
-              <Field
-                icon={<KeyRound size={18} />}
-                label="Invitation code"
-                placeholder="Code from your school administrator"
-                type="text"
-                value={teacherInviteCode}
-                onChange={setTeacherInviteCode}
                 required
               />
             )}

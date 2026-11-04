@@ -30,41 +30,52 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     let mounted = true;
 
-    const load = async () => {
-      const { data } = await supabase.auth.getSession();
+    const applySession = async (s: Awaited<ReturnType<typeof supabase.auth.getSession>>['data']['session']) => {
       if (!mounted) return;
-      const s = data.session;
-      if (s) {
-        setSession({ userId: s.user.id, email: s.user.email });
-        const { data: prof } = await supabase
-          .from('profiles')
-          .select('id, full_name, role')
-          .eq('id', s.user.id)
-          .maybeSingle();
-        if (mounted) setProfile(prof as Profile | null);
+      if (!s) {
+        setSession(null);
+        setProfile(null);
+        setLoading(false);
+        return;
+      }
+
+      setSession({ userId: s.user.id, email: s.user.email });
+      const { data: prof, error } = await supabase
+        .from('profiles')
+        .select('id, full_name, role')
+        .eq('id', s.user.id)
+        .maybeSingle();
+
+      if (!mounted) return;
+      if (error) {
+        console.error('Unable to load the signed-in profile', error);
+        setProfile(null);
+      } else {
+        setProfile(prof as Profile | null);
       }
       setLoading(false);
+    };
+
+    const load = async () => {
+      const { data, error } = await supabase.auth.getSession();
+      if (error) console.error('Unable to restore the OFS Pad session', error);
+      await applySession(data.session);
     };
 
     load();
 
     const { data: sub } = supabase.auth.onAuthStateChange((event, s) => {
-      (async () => {
-        if (event === 'SIGNED_OUT' || !s) {
-          setSession(null);
-          setProfile(null);
-          setLoading(false);
-          return;
-        }
-        setSession({ userId: s.user.id, email: s.user.email });
-        const { data: prof } = await supabase
-          .from('profiles')
-          .select('id, full_name, role')
-          .eq('id', s.user.id)
-          .maybeSingle();
-        setProfile(prof as Profile | null);
-        setLoading(false);
-      })();
+      if (event === 'SIGNED_OUT' || !s) {
+        void applySession(null);
+        return;
+      }
+
+      // SIGNED_IN covers Google/password callbacks; TOKEN_REFRESHED keeps the
+      // role/profile in sync after a long-lived session is renewed. Supabase's
+      // browser storage and BroadcastChannel synchronize these events across tabs.
+      if (event === 'SIGNED_IN' || event === 'TOKEN_REFRESHED' || event === 'USER_UPDATED') {
+        void applySession(s);
+      }
     });
 
     return () => {

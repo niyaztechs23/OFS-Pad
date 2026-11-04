@@ -75,3 +75,7 @@ This function works only when no administrator exists and cannot be called by no
 The auth screen includes a real Supabase Google OAuth flow. In Supabase Dashboard, open **Authentication → Providers → Google**, enable Google, and enter the Google OAuth Client ID and Client Secret from Google Cloud Console. In Google Cloud, add the Supabase callback URL shown in the provider settings, and add the OFS Pad production URL plus `/auth` as an allowed redirect URL in Supabase Authentication URL Configuration.
 
 For a Google teacher signup, the administrator first approves the teacher email in `/admin`, then sends the private URL `/auth?mode=signup&role=teacher`. The OAuth callback migration assigns the `teacher` role from the approved email row; the browser does not get to choose the role. A normal Google signup without an approved teacher email becomes a student.
+
+## Session and cookie behavior
+
+The Supabase browser client uses durable local session storage with automatic refresh, PKCE OAuth callbacks, and a stable `ofspad-auth-session` storage key. Supabase's auth listener synchronizes sign-in, sign-out and token refresh events across tabs, while the app reloads the database profile and role after each authentication event. The OAuth provider handles its own secure callback cookies; the Google Client Secret is never stored in this repository or frontend bundle.

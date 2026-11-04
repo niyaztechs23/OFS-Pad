@@ -60,7 +60,7 @@ The teacher must sign up with the approved email. After successful authenticatio
 
 ## In-app admin dashboard
 
-Day-to-day teacher approvals are managed at `/admin`; only profiles with the `admin` role can open this route or execute the approval RPCs. The dashboard lets an administrator approve an email for 7, 30 or 90 days, see pending approvals and revoke an unused approval. The browser never writes directly to `teacher_invites`.
+Day-to-day teacher approvals are managed at `/admin`; only profiles with the `admin` role can open this route or execute the approval RPCs. The dashboard lets an administrator approve an email for 7, 30 or 90 days, copy or email the private signup link, see pending approvals and revoke an unused approval. The browser never writes directly to `teacher_invites`.
 
 The first administrator is bootstrapped once from a trusted Supabase SQL Editor session. First create a normal OFS Pad account for the administrator, then run:
 

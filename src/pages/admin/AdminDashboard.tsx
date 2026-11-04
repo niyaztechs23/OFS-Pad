@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Clock3, MailPlus, RefreshCw, ShieldCheck, Trash2, UserCheck } from 'lucide-react';
+import { Clock3, Link2, Mail, MailPlus, RefreshCw, ShieldCheck, Trash2, UserCheck } from 'lucide-react';
 import { AppShell } from '@/components/layout/AppShell';
 import { Card } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
@@ -88,6 +88,23 @@ export default function AdminDashboard() {
     setRevokingId(null);
   };
 
+  const signupLink = `${window.location.origin}/auth?mode=signup&role=teacher`;
+
+  const copySignupLink = async (teacherEmail: string) => {
+    try {
+      await navigator.clipboard.writeText(signupLink);
+      setNotice(`Private signup link copied for ${teacherEmail}.`);
+    } catch {
+      window.prompt('Copy this private teacher signup link:', signupLink);
+    }
+  };
+
+  const emailSignupLink = (teacherEmail: string) => {
+    const subject = encodeURIComponent('Your OFS Pad teacher signup link');
+    const body = encodeURIComponent(`Your school has approved your OFS Pad teacher account. Open this private link to continue with Google or email signup:\n\n${signupLink}`);
+    window.location.href = `mailto:${teacherEmail}?subject=${subject}&body=${body}`;
+  };
+
   const adminName = profile?.full_name?.split(' ')[0] ?? 'Admin';
 
   return (
@@ -165,6 +182,10 @@ export default function AdminDashboard() {
                     </div>
                     <div className="flex items-center gap-3 shrink-0">
                       <Badge tone={expired ? 'clay' : 'leaf'}>{expired ? 'Expired' : 'Pending'}</Badge>
+                      {!expired && <>
+                        <Button variant="ghost" size="sm" onClick={() => void copySignupLink(approval.email)}><Link2 size={15} /> Copy link</Button>
+                        <Button variant="ghost" size="sm" onClick={() => emailSignupLink(approval.email)}><Mail size={15} /> Email link</Button>
+                      </>}
                       <Button variant="outline" size="sm" onClick={() => void revokeApproval(approval.id)} disabled={revokingId === approval.id}><Trash2 size={15} /> {revokingId === approval.id ? 'Revoking…' : 'Revoke'}</Button>
                     </div>
                   </Card>

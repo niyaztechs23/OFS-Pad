@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useSearchParams, Link } from 'react-router-dom';
 import { Logo } from '@/components/Logo';
 import { Button } from '@/components/ui/Button';
-import { ArrowLeft, Mail, Lock, User } from 'lucide-react';
+import { ArrowLeft, Mail, Lock, User, Chrome } from 'lucide-react';
 import { supabase } from '@/lib/supabase';
 import { useAuth } from '@/components/auth/AuthProvider';
 
@@ -60,6 +60,29 @@ export function AuthPage() {
       }
     } catch (err) {
       setError(friendlyError(err instanceof Error ? err.message : 'Something went wrong. Please try again.'));
+      setBusy(false);
+    }
+  };
+
+  const continueWithGoogle = async () => {
+    setError(null);
+    setBusy(true);
+    try {
+      const redirectUrl = new URL('/auth', window.location.origin);
+      redirectUrl.searchParams.set('oauth', 'callback');
+      if (mode === 'signup') redirectUrl.searchParams.set('mode', 'signup');
+      if (role === 'teacher') redirectUrl.searchParams.set('role', 'teacher');
+
+      const { error: err } = await supabase.auth.signInWithOAuth({
+        provider: 'google',
+        options: {
+          redirectTo: redirectUrl.toString(),
+          queryParams: { access_type: 'offline', prompt: 'select_account' },
+        },
+      });
+      if (err) throw err;
+    } catch (err) {
+      setError(friendlyError(err instanceof Error ? err.message : 'Google sign-in is unavailable right now.'));
       setBusy(false);
     }
   };
@@ -142,6 +165,16 @@ export function AuthPage() {
               {busy ? 'Please wait…' : mode === 'login' ? 'Log in' : 'Create account'}
             </Button>
           </form>
+
+          <div className="flex items-center gap-3 my-5">
+            <span className="h-px flex-1 bg-ink-100 dark:bg-ink-700" />
+            <span className="text-xs text-ink-300 dark:text-ink-300">or</span>
+            <span className="h-px flex-1 bg-ink-100 dark:bg-ink-700" />
+          </div>
+
+          <Button type="button" variant="outline" size="lg" fullWidth disabled={busy} onClick={() => void continueWithGoogle()}>
+            <Chrome size={18} /> Continue with Google
+          </Button>
 
           <p className="text-center text-xs text-ink-300 dark:text-ink-300 mt-5">
             {mode === 'login'

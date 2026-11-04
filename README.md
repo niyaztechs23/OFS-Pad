@@ -69,3 +69,9 @@ select public.bootstrap_first_admin('admin@school.edu');
 ```
 
 This function works only when no administrator exists and cannot be called by normal app users. After it succeeds, log in again and use the **Teacher approvals** dashboard. No further SQL is needed for routine teacher approvals.
+
+## Google authentication
+
+The auth screen includes a real Supabase Google OAuth flow. In Supabase Dashboard, open **Authentication → Providers → Google**, enable Google, and enter the Google OAuth Client ID and Client Secret from Google Cloud Console. In Google Cloud, add the Supabase callback URL shown in the provider settings, and add the OFS Pad production URL plus `/auth` as an allowed redirect URL in Supabase Authentication URL Configuration.
+
+For a Google teacher signup, the administrator first approves the teacher email in `/admin`, then sends the private URL `/auth?mode=signup&role=teacher`. The OAuth callback migration assigns the `teacher` role from the approved email row; the browser does not get to choose the role. A normal Google signup without an approved teacher email becomes a student.

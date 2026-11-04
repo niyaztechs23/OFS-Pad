@@ -14,6 +14,7 @@
     { "path": "/teacher/assignments", "title": "Teacher assignments" },
     { "path": "/teacher/exams", "title": "Teacher exams" },
     { "path": "/teacher/doubts", "title": "Teacher doubts" },
-    { "path": "/teacher/announcements", "title": "Teacher announcements" }
+    { "path": "/teacher/announcements", "title": "Teacher announcements" },
+    { "path": "/admin", "title": "Teacher approvals" }
   ]
 }

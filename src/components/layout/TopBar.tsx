@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { Bell, Moon, Sun, LogOut, ChevronRight } from 'lucide-react';
 import { useTheme } from '@/components/theme/ThemeProvider';
 import { useAuth } from '@/components/auth/AuthProvider';
+import { type Role } from '@/lib/supabase';
 import { useStudentNotifications } from '@/hooks/useStudent';
 import { useToGrade } from '@/hooks/useTeacher';
 import { timeAgo } from '@/utils/time';
@@ -22,7 +23,7 @@ export function TopBar({
   role,
 }: {
   name: string;
-  role: 'student' | 'teacher';
+  role: Role;
   notifications: Notification[];
 }) {
   const { theme, toggle } = useTheme();
@@ -45,14 +46,16 @@ export function TopBar({
           read: false,
           href: `/teacher/assignments?review=${g.assignment_id}&submission=${g.id}`,
         }))
-      : student.items.map((n) => ({
+      : role === 'student'
+      ? student.items.map((n) => ({
           id: n.id,
           title: n.title,
           body: n.body,
           time: n.at ? timeAgo(n.at) : 'Graded',
           read: n.read,
           href: n.href,
-        }));
+        }))
+      : [];
   const unread = rows.filter((n) => !n.read).length;
 
   useEffect(() => {
@@ -66,7 +69,7 @@ export function TopBar({
   const toggleBell = () => {
     if (!bellOpen) {
       if (role === 'student') void student.refresh();
-      if (role === 'teacher') void teacher.refresh();
+          if (role === 'teacher') void teacher.refresh();
     }
     setBellOpen((v) => !v);
   };
@@ -84,7 +87,7 @@ export function TopBar({
     <header className="sticky top-0 z-30 flex items-center gap-3 h-16 px-4 sm:px-6 bg-paper/80 dark:bg-ink-900/80 backdrop-blur border-b border-ink-100/70 dark:border-ink-700/60">
       <div className="flex-1 min-w-0">
         <p className="text-xs text-ink-300 dark:text-ink-200 hidden sm:block">
-          {role === 'teacher' ? 'Teacher account' : 'Student account'}
+          {role === 'teacher' ? 'Teacher account' : role === 'admin' ? 'Admin account' : 'Student account'}
         </p>
         <p className="font-heading font-bold text-ink-600 dark:text-white truncate">
           {greeting}, {name}

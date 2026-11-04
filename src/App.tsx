@@ -17,13 +17,14 @@ import TeacherAssignments from '@/pages/teacher/TeacherAssignments';
 import TeacherExams from '@/pages/teacher/TeacherExams';
 import TeacherDoubts from '@/pages/teacher/TeacherDoubts';
 import TeacherAnnouncements from '@/pages/teacher/TeacherAnnouncements';
+import AdminDashboard from '@/pages/admin/AdminDashboard';
 
 function HomeOrDashboard() {
   const { session, profile, loading } = useAuth();
   if (loading) return <LandingPage />;
   if (!session) return <LandingPage />;
   if (!profile) return <Navigate to="/auth" replace />;
-  return <Navigate to={profile.role === 'teacher' ? '/teacher' : '/student'} replace />;
+  return <Navigate to={profile.role === 'teacher' ? '/teacher' : profile.role === 'admin' ? '/admin' : '/student'} replace />;
 }
 
 function AuthOrRedirect() {
@@ -31,7 +32,7 @@ function AuthOrRedirect() {
   if (loading) return <AuthPage />;
   if (!session) return <AuthPage />;
   if (!profile) return <AuthPage />;
-  return <Navigate to={profile.role === 'teacher' ? '/teacher' : '/student'} replace />;
+  return <Navigate to={profile.role === 'teacher' ? '/teacher' : profile.role === 'admin' ? '/admin' : '/student'} replace />;
 }
 
 export default function App() {
@@ -55,6 +56,7 @@ export default function App() {
             <Route path="/teacher/exams" element={<RequireRole role="teacher"><TeacherExams /></RequireRole>} />
             <Route path="/teacher/doubts" element={<RequireRole role="teacher"><TeacherDoubts /></RequireRole>} />
             <Route path="/teacher/announcements" element={<RequireRole role="teacher"><TeacherAnnouncements /></RequireRole>} />
+            <Route path="/admin" element={<RequireRole role="admin"><AdminDashboard /></RequireRole>} />
             <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>
         </BrowserRouter>

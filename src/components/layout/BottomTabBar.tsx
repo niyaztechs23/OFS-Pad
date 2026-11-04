@@ -11,7 +11,7 @@ export function BottomTabBar({ items }: { items: NavItem[] }) {
             <li key={item.to} className="flex-1">
               <NavLink
                 to={item.to}
-                end={item.to === '/student' || item.to === '/teacher'}
+                end={item.to === '/student' || item.to === '/teacher' || item.to === '/admin'}
                 className={({ isActive }) =>
                   `flex flex-col items-center justify-center gap-0.5 h-14 rounded-lg text-[10px] font-heading font-semibold transition-colors min-h-[44px] ${
                     isActive

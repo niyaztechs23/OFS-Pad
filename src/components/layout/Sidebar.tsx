@@ -1,8 +1,8 @@
 import { NavLink } from 'react-router-dom';
 import { Logo } from '@/components/Logo';
-import { type NavItem } from '@/data/nav';
+import { type NavItem, type Role } from '@/data/nav';
 
-export function Sidebar({ items, role }: { items: NavItem[]; role: 'student' | 'teacher' }) {
+export function Sidebar({ items, role }: { items: NavItem[]; role: Role }) {
   return (
     <aside className="hidden md:flex flex-col w-60 shrink-0 border-r border-ink-100/70 dark:border-ink-700/60 bg-paper-card dark:bg-ink-900 px-4 py-6">
       <div className="px-2 mb-8">
@@ -11,7 +11,7 @@ export function Sidebar({ items, role }: { items: NavItem[]; role: 'student' | '
 
       <nav className="flex flex-col gap-1">
         <p className="px-3 mb-1 text-xs font-semibold uppercase tracking-wider text-ink-300 dark:text-ink-200">
-          {role === 'student' ? 'Student' : 'Teacher'}
+          {role === 'student' ? 'Student' : role === 'teacher' ? 'Teacher' : 'Admin'}
         </p>
         {items.map((item) => {
           const Icon = item.icon;
@@ -19,7 +19,7 @@ export function Sidebar({ items, role }: { items: NavItem[]; role: 'student' | '
             <NavLink
               key={item.to}
               to={item.to}
-              end={item.to === '/student' || item.to === '/teacher'}
+              end={item.to === '/student' || item.to === '/teacher' || item.to === '/admin'}
               className={({ isActive }) =>
                 `flex items-center gap-3 px-3 h-11 rounded-xl text-sm font-heading font-semibold transition-colors min-h-[44px] ${
                   isActive

@@ -57,3 +57,15 @@ values ('teacher@school.edu', now() + interval '7 days');
 ```
 
 The teacher must sign up with the approved email. After successful authentication, the role-protected teacher workflow becomes available automatically. Configure Supabase email confirmation for production so only the owner of the approved email can activate the account.
+
+## In-app admin dashboard
+
+Day-to-day teacher approvals are managed at `/admin`; only profiles with the `admin` role can open this route or execute the approval RPCs. The dashboard lets an administrator approve an email for 7, 30 or 90 days, see pending approvals and revoke an unused approval. The browser never writes directly to `teacher_invites`.
+
+The first administrator is bootstrapped once from a trusted Supabase SQL Editor session. First create a normal OFS Pad account for the administrator, then run:
+
+```sql
+select public.bootstrap_first_admin('admin@school.edu');
+```
+
+This function works only when no administrator exists and cannot be called by normal app users. After it succeeds, log in again and use the **Teacher approvals** dashboard. No further SQL is needed for routine teacher approvals.

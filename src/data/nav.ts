@@ -1,4 +1,4 @@
-import { Home, BookOpen, ClipboardList, MessageCircleQuestion, CalendarDays, Users, Megaphone } from 'lucide-react';
+import { Home, BookOpen, ClipboardList, MessageCircleQuestion, CalendarDays, Users, Megaphone, ShieldCheck } from 'lucide-react';
 import { type LucideIcon } from 'lucide-react';
 
 export type NavItem = {
@@ -25,4 +25,8 @@ export const teacherNav: NavItem[] = [
   { label: 'Announcements', to: '/teacher/announcements', icon: Megaphone },
 ];
 
-export type Role = 'student' | 'teacher';
+export const adminNav: NavItem[] = [
+  { label: 'Teacher approvals', to: '/admin', icon: ShieldCheck },
+];
+
+export type Role = 'student' | 'teacher' | 'admin';

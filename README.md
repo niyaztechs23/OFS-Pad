@@ -2,80 +2,78 @@
 
 OFS Pad is a calm, privacy-first school workspace for students and teachers. It includes role-based authentication, teacher classes and assignments, student class joining, notebook pages, assignment submission, grading, feedback, real class doubts, teacher answers, student upvotes, live exams, class announcements, and clickable notifications.
 
+## Links
+
+- Production: https://ofs-pad-mqy1.vercel.app
+- GitHub: https://github.com/niyaztechs23/OFS-Pad
+
+## Documentation
+
+The detailed notes are separated by workflow in the [`docs/`](./docs) directory:
+
+- [`SETUP.md`](./docs/SETUP.md) — install, environment variables, local development, and checks
+- [`AUTHENTICATION.md`](./docs/AUTHENTICATION.md) — email auth, Google OAuth, sessions, and roles
+- [`ADMIN_TEACHERS.md`](./docs/ADMIN_TEACHERS.md) — admin bootstrap, private teacher approval, and teacher workflow
+- [`STUDENT_WORKFLOWS.md`](./docs/STUDENT_WORKFLOWS.md) — classes, notebooks, assignments, doubts, announcements, and planner
+- [`DATABASE_SECURITY.md`](./docs/DATABASE_SECURITY.md) — migrations, RLS, RPCs, Realtime, and secrets
+- [`DEPLOYMENT.md`](./docs/DEPLOYMENT.md) — Vercel, Supabase, Google Cloud, and release checklist
+- [`TROUBLESHOOTING.md`](./docs/TROUBLESHOOTING.md) — common auth, routing, notebook, realtime, and build problems
+- [`PROJECT_MAP.md`](./docs/PROJECT_MAP.md) — source-code map and recommended change flow
+
 ## Run locally
 
 1. Install Node.js 20 or newer.
-2. Open a terminal in this folder.
-3. Run `npm install`.
-4. Confirm `.env` contains `VITE_SUPABASE_URL` and `VITE_SUPABASE_ANON_KEY`.
+2. Install dependencies with `npm install`.
+3. Copy `.env.example` to `.env`.
+4. Set `VITE_SUPABASE_URL` and `VITE_SUPABASE_ANON_KEY` in `.env`.
 5. Run `npm run dev`.
 6. Open the local URL shown by Vite.
 
+Only the publishable Supabase anon key belongs in the frontend. Never put a Supabase service-role key, Google Client Secret, database password, or personal password in `.env` or source code.
+
 ## Quality checks
 
-- `npm run typecheck` checks TypeScript.
-- `npm run lint` checks the source. The current project has two non-blocking Fast Refresh warnings because the auth and theme modules also export their hooks.
-- `npm run build` creates the production bundle in `dist/`.
-
-## Core demo path
-
-Create a teacher account, create a class, and copy its join code. Create an assignment for that class. Then create or use a student account, join the class with the code, and open Assignments. Submit notebook work, return to the teacher account, open the grading notification, set marks and feedback, and return to the student account to confirm the graded result.
-
-The frontend uses the publishable Supabase anon key only. Authorization and privacy depend on Supabase Row Level Security; do not put a service-role key in `.env` or frontend code. The complete expansion plan is documented in [`OFS_PAD_PRODUCT_SCOPE.md`](./OFS_PAD_PRODUCT_SCOPE.md) and [`plan.md`](./plan.md).
-
-## Backend migration
-
-The core schema is already represented in `supabase/migrations/20261019111348_create_core_schema.sql`. The forward-only migration `supabase/migrations/20261025180000_harden_submissions_and_notifications.sql` has now been applied to the Supabase project currently used by this app. The security migration `supabase/migrations/20261025190000_security_hardening_roles_and_rpc.sql` is also applied: ordinary users cannot change roles, internal RLS helpers are private, and only the intended authenticated `join_class` RPC is public. If you point `.env` at a different Supabase project later, apply all migrations there too.
-
-## Verified in this working copy
-
-The TypeScript check passes, the lint command completes with only the two non-blocking warnings documented above, the production Vite build succeeds, the development server serves the landing page and all declared routes, and the configured Supabase REST endpoint responds successfully.
-
-## Real doubts and announcements
-
-The migration `supabase/migrations/20261025193000_doubts_and_announcements.sql` adds class-scoped doubts, privacy-preserving anonymous labels, one-vote-per-user upvotes, teacher answer RPCs, announcements and announcement notifications. Students can ask in a joined class, teachers can answer doubts from their own classes, teachers can publish announcements, and students receive both the announcement row and a notification. The live backend flow was smoke-tested and temporary test rows were removed afterward.
-
-## Realtime behavior
-
-The migration `supabase/migrations/20261025194000_enable_realtime_community.sql` enables Supabase Realtime for doubts, announcements, notifications and submissions. The student and teacher dashboards subscribe to live doubt, announcement, notification and grading changes, clean up channels on unmount, and use a 15-second refresh fallback so a temporarily missed websocket event cannot leave a stale screen.
-
-The final regression pass covered teacher and student authentication, class membership, assignment visibility, submission, teacher grading, student feedback, anonymous doubts, teacher answers, announcements, notification creation, the student Doubt Wall and Announcements screens, and the teacher dashboard, Doubts and Announcements screens. Temporary test records were removed.
-
-## Live exams
-
-The migration `supabase/migrations/20261025194500_exams.sql` adds the real `exams` table with RLS, teacher ownership, joined-class student visibility, exam notifications and Realtime publication. Teachers create and delete exams from `/teacher/exams`; students see exams in `/student/planner` and on the student dashboard. There are no seeded exam records in the application.
-
-## Teacher account access
-
-Teacher registration is invitation-only and email-approved. The public signup screen does not expose teacher onboarding. An authorized school administrator approves a teacher email in Supabase, then shares the private signup URL `/auth?mode=signup&role=teacher`. The Supabase Auth trigger independently verifies that the email is approved, unused and not expired before assigning the `teacher` role. A student cannot create a teacher account by changing browser fields or request metadata.
-
-To approve a teacher, an authorized school administrator can run this in the Supabase SQL editor:
-
-```sql
-insert into public.teacher_invites (email, expires_at)
-values ('teacher@school.edu', now() + interval '7 days');
+```bash
+npm run typecheck
+npm run lint
+npm run build
 ```
 
-The teacher must sign up with the approved email. After successful authentication, the role-protected teacher workflow becomes available automatically. Configure Supabase email confirmation for production so only the owner of the approved email can activate the account.
+The current lint output contains two non-blocking Fast Refresh warnings because the auth and theme modules also export their hooks. TypeScript and the production Vite build should complete successfully.
 
-## In-app admin dashboard
+## Backend migrations
 
-Day-to-day teacher approvals are managed at `/admin`; only profiles with the `admin` role can open this route or execute the approval RPCs. The dashboard lets an administrator approve an email for 7, 30 or 90 days, copy or email the private signup link, see pending approvals and revoke an unused approval. The browser never writes directly to `teacher_invites`.
+Apply every file in `supabase/migrations/` in filename order when setting up a Supabase project. The migrations create the core schema, submissions, notifications, role security, doubts, announcements, Realtime publication, exams, teacher approvals, admin controls, and Google teacher-role protection.
 
-The first administrator is bootstrapped once from a trusted Supabase SQL Editor session. First create a normal OFS Pad account for the administrator, then run:
+If you point `.env` at a different Supabase project, apply the complete migration set there before testing. Authorization and privacy depend on Supabase Row Level Security; the frontend is not the security boundary.
+
+## Teacher access
+
+Teacher registration is invitation-only and email-approved. The public signup screen does not expose teacher onboarding. An administrator approves a teacher email in `/admin`, then shares `/auth?mode=signup&role=teacher`. The authenticated email must match an approved, unused, unexpired approval before the database assigns the `teacher` role.
+
+The first administrator is bootstrapped once from a trusted Supabase SQL Editor session. Create the administrator account first, then run:
 
 ```sql
-select public.bootstrap_first_admin('admin@school.edu');
+select public.bootstrap_first_admin('deendeen084@gmail.com');
 ```
 
-This function works only when no administrator exists and cannot be called by normal app users. After it succeeds, log in again and use the **Teacher approvals** dashboard. No further SQL is needed for routine teacher approvals.
+Afterward, routine teacher approvals happen inside the in-app admin dashboard. Never store the administrator password in this repository.
 
 ## Google authentication
 
-The auth screen includes a real Supabase Google OAuth flow. In Supabase Dashboard, open **Authentication → Providers → Google**, enable Google, and enter the Google OAuth Client ID and Client Secret from Google Cloud Console. In Google Cloud, add the Supabase callback URL shown in the provider settings, and add the OFS Pad production URL plus `/auth` as an allowed redirect URL in Supabase Authentication URL Configuration.
+Supabase Authentication → Providers → Google must be enabled with the Google OAuth Client ID and Client Secret. Google Cloud should use the Supabase callback URL shown by the provider settings. Supabase URL Configuration should use:
 
-For a Google teacher signup, the administrator first approves the teacher email in `/admin`, then sends the private URL `/auth?mode=signup&role=teacher`. The OAuth callback migration assigns the `teacher` role from the approved email row; the browser does not get to choose the role. A normal Google signup without an approved teacher email becomes a student.
+```text
+Site URL: https://ofs-pad-mqy1.vercel.app
+Redirect URL: https://ofs-pad-mqy1.vercel.app/auth
+```
 
-## Session and cookie behavior
+The app uses durable browser sessions, automatic refresh, PKCE callbacks, and profile/role synchronization after auth events. A production smoke test with the secondary Google student account completed successfully and landed at `/student`.
 
-The Supabase browser client uses durable local session storage with automatic refresh, PKCE OAuth callbacks, and a stable `ofspad-auth-session` storage key. Supabase's auth listener synchronizes sign-in, sign-out and token refresh events across tabs, while the app reloads the database profile and role after each authentication event. The OAuth provider handles its own secure callback cookies; the Google Client Secret is never stored in this repository or frontend bundle.
+## Student notebooks
+
+Students can open `/student/notebooks`, create notebooks with a name and subject, rename notebook titles from the editor, add pages, use handwriting/type tools, and submit work to teachers. The create-and-rename flow was verified in production. Current notebook state is stored per user/browser through the notebook store; it is not yet cross-device cloud notebook synchronization.
+
+## Deployment
+
+Vercel builds the Vite app into `dist/` and uses `vercel.json` to rewrite application routes to `/index.html`. Configure `VITE_SUPABASE_URL` and `VITE_SUPABASE_ANON_KEY` in Vercel Preview/Production environments. Follow [`docs/DEPLOYMENT.md`](./docs/DEPLOYMENT.md) before changing production configuration.

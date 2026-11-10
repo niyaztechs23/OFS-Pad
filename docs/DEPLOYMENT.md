@@ -29,6 +29,8 @@ npm run build
 
 The output directory is `dist/`. `vercel.json` rewrites application routes to `/index.html` so React Router routes work on direct navigation.
 
+The managed Webdev publish contract uses `Dockerfile` and `server.mjs` for production. The container builds the Vite bundle, serves `dist/` on `0.0.0.0`, honors the platform `PORT`, and exposes the unauthenticated readiness endpoint `/health`.
+
 ## Supabase URL configuration
 
 For production Google OAuth:

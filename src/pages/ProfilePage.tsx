@@ -1,5 +1,5 @@
-import { useEffect, useMemo, useState, type FormEvent, type ReactNode } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { useEffect, useMemo, useState, type ReactNode } from 'react';
+import { Link } from 'react-router-dom';
 import {
   BookOpen,
   CalendarDays,
@@ -8,7 +8,6 @@ import {
   GraduationCap,
   Globe,
   KeyRound,
-  LogOut,
   Mail,
   ShieldCheck,
   Sparkles,
@@ -18,8 +17,6 @@ import {
 import { AppShell } from '@/components/layout/AppShell';
 import { Card } from '@/components/ui/Card';
 import { Badge } from '@/components/ui/Badge';
-import { Button } from '@/components/ui/Button';
-import { PasswordField } from '@/components/ui/PasswordField';
 import { SubjectTag } from '@/components/ui/SubjectTag';
 import { LogoMark } from '@/components/Logo';
 import { useAuth } from '@/components/auth/AuthProvider';
@@ -70,8 +67,7 @@ function Stat({ icon, label, value }: { icon: ReactNode; label: string; value: s
 }
 
 export default function ProfilePage() {
-  const { session, profile, signOut, refreshProfile } = useAuth();
-  const navigate = useNavigate();
+  const { session, profile } = useAuth();
   const role: Role = profile?.role ?? 'student';
   const isStudent = role === 'student';
   const isTeacher = role === 'teacher';
@@ -83,26 +79,11 @@ export default function ProfilePage() {
   const { assignments: teacherAssignments } = useTeacherAssignments(isTeacher ? session?.userId : undefined);
   const { items: toGrade } = useToGrade(isTeacher ? session?.userId : undefined);
 
-  const [name, setName] = useState(profile?.full_name ?? '');
-  const [nameBusy, setNameBusy] = useState(false);
-  const [nameNotice, setNameNotice] = useState<string | null>(null);
-  const [nameError, setNameError] = useState<string | null>(null);
-
-  const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
-  const [passwordBusy, setPasswordBusy] = useState(false);
-  const [passwordNotice, setPasswordNotice] = useState<string | null>(null);
-  const [passwordError, setPasswordError] = useState<string | null>(null);
-
   const [account, setAccount] = useState<{
     createdAt?: string;
     lastSignIn?: string;
     provider?: string;
   }>({});
-
-  useEffect(() => {
-    setName(profile?.full_name ?? '');
-  }, [profile?.full_name]);
 
   useEffect(() => {
     let active = true;
@@ -177,59 +158,6 @@ export default function ProfilePage() {
           { label: 'Planner', to: '/student/planner', icon: <CalendarDays size={18} /> },
         ];
 
-  const saveName = async (event: FormEvent) => {
-    event.preventDefault();
-    if (!session?.userId) return;
-    const trimmed = name.trim();
-    if (trimmed.length < 2) {
-      setNameError('Please enter your full name.');
-      return;
-    }
-    setNameBusy(true);
-    setNameError(null);
-    setNameNotice(null);
-    const { error } = await supabase
-      .from('profiles')
-      .update({ full_name: trimmed })
-      .eq('id', session.userId);
-    setNameBusy(false);
-    if (error) {
-      setNameError(error.message);
-      return;
-    }
-    await refreshProfile();
-    setNameNotice('Your name has been updated.');
-  };
-
-  const changePassword = async (event: FormEvent) => {
-    event.preventDefault();
-    setPasswordError(null);
-    setPasswordNotice(null);
-    if (password.length < 8) {
-      setPasswordError('Use at least 8 characters.');
-      return;
-    }
-    if (password !== confirmPassword) {
-      setPasswordError('The two passwords do not match.');
-      return;
-    }
-    setPasswordBusy(true);
-    const { error } = await supabase.auth.updateUser({ password });
-    setPasswordBusy(false);
-    if (error) {
-      setPasswordError(error.message);
-      return;
-    }
-    setPassword('');
-    setConfirmPassword('');
-    setPasswordNotice('Your password has been changed. Use it the next time you log in.');
-  };
-
-  const logOut = async () => {
-    await signOut();
-    navigate('/');
-  };
-
   if (!profile) {
     return (
       <div className="min-h-screen grid place-items-center bg-paper dark:bg-ink-900">
@@ -281,106 +209,30 @@ export default function ProfilePage() {
                 <UserRound size={18} className="text-ink-500 dark:text-ink-100" />
                 <h2 className="font-heading font-bold text-lg text-ink-600 dark:text-white">Your details</h2>
               </div>
-              <form onSubmit={saveName} className="space-y-4">
-                <label className="block">
+              <div className="space-y-4">
+                <div>
                   <span className="block text-sm font-semibold text-ink-500 dark:text-ink-100 mb-1.5">Full name</span>
-                  <span className="relative block">
+                  <span className="relative block rounded-xl bg-ink-50/70 dark:bg-ink-700/50 border border-ink-100 dark:border-ink-700 px-4 h-12 flex items-center text-ink-600 dark:text-white">
                     <span className="absolute left-3 top-1/2 -translate-y-1/2 text-ink-300 dark:text-ink-300">
                       <UserRound size={18} />
                     </span>
-                    <input
-                      type="text"
-                      value={name}
-                      onChange={(e) => setName(e.target.value)}
-                      autoComplete="name"
-                      required
-                      className="w-full h-12 pl-11 pr-4 rounded-xl bg-white dark:bg-ink-800 border border-ink-100 dark:border-ink-700 text-ink-600 dark:text-white placeholder:text-ink-300 focus:outline-none focus:border-ink-400 focus:ring-2 focus:ring-ink-100 dark:focus:ring-ink-700 transition-colors"
-                    />
+                    <span className="pl-7">{profile.full_name}</span>
                   </span>
-                </label>
-                <label className="block">
+                  <span className="block text-xs text-ink-300 dark:text-ink-300 mt-1.5">Your registered name is fixed after account creation.</span>
+                </div>
+                <div>
                   <span className="block text-sm font-semibold text-ink-500 dark:text-ink-100 mb-1.5">Email address</span>
-                  <span className="relative block">
+                  <span className="relative block rounded-xl bg-ink-50/70 dark:bg-ink-700/50 border border-ink-100 dark:border-ink-700 px-4 h-12 flex items-center text-ink-400 dark:text-ink-200">
                     <span className="absolute left-3 top-1/2 -translate-y-1/2 text-ink-300 dark:text-ink-300">
                       <Mail size={18} />
                     </span>
-                    <input
-                      type="email"
-                      value={session?.email ?? ''}
-                      readOnly
-                      className="w-full h-12 pl-11 pr-4 rounded-xl bg-ink-50/70 dark:bg-ink-700/50 border border-ink-100 dark:border-ink-700 text-ink-400 dark:text-ink-200 cursor-not-allowed"
-                    />
+                    <span className="pl-7">{session?.email ?? 'Signed in with Google'}</span>
                   </span>
                   <span className="block text-xs text-ink-300 dark:text-ink-300 mt-1.5">
-                    Your school email is your sign-in identity and cannot be changed here.
+                    Your school email is your registered sign-in identity.
                   </span>
-                </label>
-                {nameError && (
-                  <p className="text-sm text-clay-600 dark:text-clay-100 bg-clay-50 dark:bg-clay-500/20 rounded-lg px-3 py-2">
-                    {nameError}
-                  </p>
-                )}
-                {nameNotice && (
-                  <p className="text-sm text-leaf-700 dark:text-leaf-100 bg-leaf-50 dark:bg-leaf-700/30 rounded-lg px-3 py-2">
-                    {nameNotice}
-                  </p>
-                )}
-                <Button type="submit" size="md" disabled={nameBusy || name.trim() === profile.full_name}>
-                  {nameBusy ? 'Saving…' : 'Save changes'}
-                </Button>
-              </form>
-            </Card>
-
-            {/* Password */}
-            <Card>
-              <div className="flex items-center gap-2 mb-1">
-                <KeyRound size={18} className="text-ink-500 dark:text-ink-100" />
-                <h2 className="font-heading font-bold text-lg text-ink-600 dark:text-white">Password &amp; security</h2>
-              </div>
-              <p className="text-sm text-ink-400 dark:text-ink-200 mb-4">
-                Choose a new password. Use the eye button in each field to check what you typed before saving.
-              </p>
-              <form onSubmit={changePassword} className="space-y-4">
-                <PasswordField
-                  label="New password"
-                  value={password}
-                  onChange={setPassword}
-                  placeholder="At least 8 characters"
-                  autoComplete="new-password"
-                  hint="Mix letters, numbers, and a symbol for a stronger password."
-                />
-                <PasswordField
-                  label="Confirm new password"
-                  value={confirmPassword}
-                  onChange={setConfirmPassword}
-                  placeholder="Type it again"
-                  autoComplete="new-password"
-                />
-                {passwordError && (
-                  <p className="text-sm text-clay-600 dark:text-clay-100 bg-clay-50 dark:bg-clay-500/20 rounded-lg px-3 py-2">
-                    {passwordError}
-                  </p>
-                )}
-                {passwordNotice && (
-                  <p className="text-sm text-leaf-700 dark:text-leaf-100 bg-leaf-50 dark:bg-leaf-700/30 rounded-lg px-3 py-2">
-                    {passwordNotice}
-                  </p>
-                )}
-                <div className="flex flex-wrap items-center gap-2">
-                  <Button type="submit" size="md" disabled={passwordBusy}>
-                    {passwordBusy ? 'Updating…' : 'Update password'}
-                  </Button>
-                  <Button type="button" variant="ghost" size="md" onClick={() => void logOut()}>
-                    <LogOut size={16} /> Log out
-                  </Button>
                 </div>
-                {account.provider === 'google' && (
-                  <p className="text-xs text-ink-300 dark:text-ink-300">
-                    You signed in with Google. Adding a password here lets you use email and password too, while Google
-                    sign-in keeps working.
-                  </p>
-                )}
-              </form>
+              </div>
             </Card>
           </div>
 
@@ -477,7 +329,7 @@ export default function ProfilePage() {
               <div className="mt-4 rounded-xl bg-leaf-50 dark:bg-ink-700/60 px-3 py-2.5 flex items-start gap-2">
                 <ShieldCheck size={16} className="text-leaf-700 dark:text-leaf-100 mt-0.5 shrink-0" />
                 <p className="text-xs text-leaf-700 dark:text-leaf-100">
-                  Your profile is protected by the school&apos;s database rules. Only you can change your own name.
+                  Your registered profile details are protected by the school&apos;s database rules and are read-only here.
                 </p>
               </div>
             </Card>

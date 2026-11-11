@@ -12,7 +12,7 @@ OFS Pad supports:
 
 The auth UI is at `/auth`. Public sign-up creates a student account. Teacher onboarding is intentionally hidden behind a private URL and an approved email record.
 
-Password fields use the shared `PasswordField` component. Each field is masked by default and includes an accessible eye button (`Show password` / `Hide password`) so the user can check what they typed. The same control is used on `/profile` when setting a new password.
+The sign-in and sign-up password fields use the shared `PasswordField` component. Each field is masked by default and includes an accessible eye button (`Show password` / `Hide password`) so the user can check what they typed. The profile page is read-only after registration and does not change the registered name or password.
 
 ## Google OAuth flow
 

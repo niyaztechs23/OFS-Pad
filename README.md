@@ -76,9 +76,9 @@ Students can open `/student/notebooks`, create notebooks with a name and subject
 
 ## Profile dashboard and password visibility
 
-Every signed-in user has a profile dashboard at `/profile`, reachable from the avatar in the top bar and the **Profile** item in the sidebar. It shows the account name, email, role, sign-in method, member-since date, and role-specific study or teaching statistics. Users can update their display name and set a new password there.
+Every signed-in user has a profile dashboard at `/profile`, reachable from the avatar in the top bar and the **Profile** item in the sidebar. It shows the registered account name, email, role, sign-in method, member-since date, classes, quick links, and role-specific study or teaching statistics. The profile is read-only after registration: the registered name, email, and password are not changed from this page.
 
-Password fields on the sign-in and profile screens include a visible **eye** button that switches between hidden and visible text, so students can check what they typed before submitting. Passwords are still masked by default and are never stored in the app.
+Password fields on the sign-in and sign-up screens include a visible **eye** button that switches between hidden and visible text, so students can check what they typed before submitting. Passwords are still masked by default and are never stored in the app.
 
 The OFS Pad logo supplied for the project is used across the app, sign-in screen, favicons, installed-app icons, and social preview. Brand assets live in `public/ofs-pad-*.png`.
 

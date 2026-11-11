@@ -38,6 +38,7 @@ Ownership and class membership are enforced in PostgreSQL. The frontend is not t
 - Teachers can manage only classes they own and related class activity.
 - Administrators can manage teacher approvals through protected operations.
 - Ordinary users cannot update their own role.
+- The profile dashboard treats the registered name, email, and password as read-only after registration.
 - Teacher approval must match the authenticated email and approval state.
 - Anonymous doubts hide author identity in presentation while preserving secure ownership internally.
 - Realtime channels are limited to tables already protected by the database model.

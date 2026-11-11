@@ -4,7 +4,7 @@
 
 - `src/App.tsx` — top-level routes and role-protected route selection
 - `src/pages/AuthPage.tsx` — email/password and Google auth entry point
-- `src/pages/ProfilePage.tsx` — profile dashboard for every signed-in role, name editing, password change, and study statistics
+- `src/pages/ProfilePage.tsx` — read-only profile dashboard for every signed-in role and role-specific study or teaching statistics
 - `src/components/auth/AuthProvider.tsx` — session restoration, auth events, profile/role loading
 - `src/components/ui/PasswordField.tsx` — masked password input with an accessible show/hide button
 - `src/components/Logo.tsx` — compact wordmark lockup and full supplied logo tile

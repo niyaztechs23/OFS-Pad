@@ -1,4 +1,4 @@
-import { Home, BookOpen, ClipboardList, MessageCircleQuestion, CalendarDays, Users, Megaphone, ShieldCheck } from 'lucide-react';
+import { Home, BookOpen, ClipboardList, MessageCircleQuestion, CalendarDays, Users, Megaphone, ShieldCheck, UserRound } from 'lucide-react';
 import { type LucideIcon } from 'lucide-react';
 
 export type NavItem = {
@@ -14,6 +14,7 @@ export const studentNav: NavItem[] = [
   { label: 'Doubts', to: '/student/doubts', icon: MessageCircleQuestion },
   { label: 'Announcements', to: '/student/announcements', icon: Megaphone },
   { label: 'Planner', to: '/student/planner', icon: CalendarDays },
+  { label: 'Profile', to: '/profile', icon: UserRound },
 ];
 
 export const teacherNav: NavItem[] = [
@@ -23,10 +24,16 @@ export const teacherNav: NavItem[] = [
   { label: 'Exams', to: '/teacher/exams', icon: CalendarDays },
   { label: 'Doubts', to: '/teacher/doubts', icon: MessageCircleQuestion },
   { label: 'Announcements', to: '/teacher/announcements', icon: Megaphone },
+  { label: 'Profile', to: '/profile', icon: UserRound },
 ];
 
 export const adminNav: NavItem[] = [
   { label: 'Teacher approvals', to: '/admin', icon: ShieldCheck },
+  { label: 'Profile', to: '/profile', icon: UserRound },
 ];
 
 export type Role = 'student' | 'teacher' | 'admin';
+
+export function navForRole(role: Role): NavItem[] {
+  return role === 'teacher' ? teacherNav : role === 'admin' ? adminNav : studentNav;
+}

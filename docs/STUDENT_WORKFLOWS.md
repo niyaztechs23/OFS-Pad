@@ -21,6 +21,17 @@ After sign-in, students land on `/student`. The home page summarizes:
 
 Students cannot view another class's private data.
 
+## Profile dashboard
+
+Open `/profile` from the avatar in the top bar or the **Profile** item in the sidebar. The dashboard shows:
+
+- Name, school email, role, sign-in method, and member-since date
+- Classes joined, work due now, submitted work, and graded work
+- The student's class list with subject tags
+- Shortcuts to notebooks, assignments, and the planner
+
+Students can edit their display name and set a new password from this page. The name update is written to `profiles` under the existing "update own profile" policy; students cannot change their own role. Password fields include an eye button that shows or hides the typed password.
+
 ## Notebooks
 
 Student notebook pages are available at `/student/notebooks`.

@@ -1,8 +1,9 @@
 import { useState } from 'react';
 import { useSearchParams, Link } from 'react-router-dom';
-import { Logo } from '@/components/Logo';
+import { Logo, LogoFull } from '@/components/Logo';
 import { Button } from '@/components/ui/Button';
-import { ArrowLeft, Mail, Lock, User, Chrome } from 'lucide-react';
+import { PasswordField } from '@/components/ui/PasswordField';
+import { ArrowLeft, Mail, User, Chrome } from 'lucide-react';
 import { supabase } from '@/lib/supabase';
 import { useAuth } from '@/components/auth/AuthProvider';
 
@@ -99,6 +100,7 @@ export function AuthPage() {
       <div className="flex-1 grid place-items-center px-5 py-8">
         <div className="w-full max-w-md">
           <div className="text-center mb-7">
+            <LogoFull className="w-20 h-20 mx-auto mb-4" />
             <h1 className="font-heading font-extrabold text-2xl text-ink-600 dark:text-white">
               {mode === 'login' ? 'Welcome back' : 'Create your account'}
             </h1>
@@ -145,14 +147,12 @@ export function AuthPage() {
               onChange={setEmail}
               required
             />
-            <Field
-              icon={<Lock size={18} />}
+            <PasswordField
               label="Password"
-              placeholder="••••••••"
-              type="password"
               value={password}
               onChange={setPassword}
-              required
+              autoComplete={mode === 'login' ? 'current-password' : 'new-password'}
+              hint={mode === 'signup' ? 'Use at least 8 characters. Tap the eye to check what you typed.' : undefined}
             />
 
             {error && (

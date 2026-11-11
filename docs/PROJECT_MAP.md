@@ -4,7 +4,10 @@
 
 - `src/App.tsx` — top-level routes and role-protected route selection
 - `src/pages/AuthPage.tsx` — email/password and Google auth entry point
+- `src/pages/ProfilePage.tsx` — profile dashboard for every signed-in role, name editing, password change, and study statistics
 - `src/components/auth/AuthProvider.tsx` — session restoration, auth events, profile/role loading
+- `src/components/ui/PasswordField.tsx` — masked password input with an accessible show/hide button
+- `src/components/Logo.tsx` — compact wordmark lockup and full supplied logo tile
 - `src/pages/student/` — student home, notebooks, assignments, doubts, announcements, planner
 - `src/pages/teacher/` — class, assignment, grading, doubt, announcement, and exam workflows
 - `src/pages/admin/AdminDashboard.tsx` — teacher approval management
@@ -23,6 +26,8 @@
 
 - `vercel.json` — React SPA rewrite
 - `public/manus-routes.json` — declared application routes
+- `public/ofs-pad-logo.png` and `public/ofs-pad-*.png` — supplied brand logo, favicons, and installed-app icons
+- `public/site.webmanifest` — installed-app name, colours, and icons
 - `.env.example` — safe environment variable template
 - `package.json` — development, typecheck, lint, and build commands
 

@@ -74,6 +74,14 @@ The app uses durable browser sessions, automatic refresh, PKCE callbacks, and pr
 
 Students can open `/student/notebooks`, create notebooks with a name and subject, rename notebook titles from the editor, add pages, use handwriting/type tools, and submit work to teachers. The create-and-rename flow was verified in production. Current notebook state is stored per user/browser through the notebook store; it is not yet cross-device cloud notebook synchronization.
 
+## Profile dashboard and password visibility
+
+Every signed-in user has a profile dashboard at `/profile`, reachable from the avatar in the top bar and the **Profile** item in the sidebar. It shows the account name, email, role, sign-in method, member-since date, and role-specific study or teaching statistics. Users can update their display name and set a new password there.
+
+Password fields on the sign-in and profile screens include a visible **eye** button that switches between hidden and visible text, so students can check what they typed before submitting. Passwords are still masked by default and are never stored in the app.
+
+The OFS Pad logo supplied for the project is used across the app, sign-in screen, favicons, installed-app icons, and social preview. Brand assets live in `public/ofs-pad-*.png`.
+
 ## Deployment
 
 Vercel builds the Vite app into `dist/` and uses `vercel.json` to rewrite application routes to `/index.html`. Configure `VITE_SUPABASE_URL` and `VITE_SUPABASE_ANON_KEY` in Vercel Preview/Production environments. Follow [`docs/DEPLOYMENT.md`](./docs/DEPLOYMENT.md) before changing production configuration.

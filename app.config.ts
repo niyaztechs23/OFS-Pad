@@ -1,3 +1,3 @@
 export default {
-  logoUrl: "https://files.manuscdn.com/user_upload_by_module/session_file/310519664055466222/CcQdhuPZZrluILtD.svg",
+  logoUrl: "https://ofs-pad-mqy1.vercel.app/ofs-pad-512.png",
 };

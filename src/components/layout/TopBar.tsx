@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Bell, Moon, Sun, LogOut, ChevronRight } from 'lucide-react';
 import { useTheme } from '@/components/theme/ThemeProvider';
 import { useAuth } from '@/components/auth/AuthProvider';
@@ -27,7 +27,7 @@ export function TopBar({
   notifications: Notification[];
 }) {
   const { theme, toggle } = useTheme();
-  const { signOut, session } = useAuth();
+  const { signOut, session, profile } = useAuth();
   const navigate = useNavigate();
   const [bellOpen, setBellOpen] = useState(false);
   const bellRef = useRef<HTMLDivElement>(null);
@@ -82,6 +82,13 @@ export function TopBar({
 
   const hour = new Date().getHours();
   const greeting = hour < 12 ? 'Good morning' : hour < 17 ? 'Good afternoon' : 'Good evening';
+  const initials =
+    (profile?.full_name ?? name)
+      .split(/\s+/)
+      .filter(Boolean)
+      .slice(0, 2)
+      .map((part) => part[0]?.toUpperCase())
+      .join('') || 'OF';
 
   return (
     <header className="sticky top-0 z-30 flex items-center gap-3 h-16 px-4 sm:px-6 bg-paper/80 dark:bg-ink-900/80 backdrop-blur border-b border-ink-100/70 dark:border-ink-700/60">
@@ -161,6 +168,15 @@ export function TopBar({
           </div>
         )}
       </div>
+
+      <Link
+        to="/profile"
+        aria-label="Open your profile"
+        title="Your profile"
+        className="w-11 h-11 grid place-items-center rounded-full bg-ink-500 text-white font-heading font-bold text-sm hover:bg-ink-600 dark:hover:bg-ink-400 transition-colors min-h-[44px]"
+      >
+        {initials}
+      </Link>
 
       <button
         onClick={async () => { await signOut(); navigate('/'); }}

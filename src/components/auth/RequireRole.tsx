@@ -7,7 +7,7 @@ function homeForRole(role: Role) {
   return role === 'teacher' ? '/teacher' : role === 'admin' ? '/admin' : '/student';
 }
 
-export function RequireRole({ role, children }: { role: Role; children: ReactNode }) {
+export function RequireRole({ role, children }: { role?: Role; children: ReactNode }) {
   const { session, profile, loading } = useAuth();
 
   if (loading) {
@@ -26,7 +26,7 @@ export function RequireRole({ role, children }: { role: Role; children: ReactNod
     return <Navigate to="/auth" replace />;
   }
 
-  if (profile.role !== role) {
+  if (role && profile.role !== role) {
     return <Navigate to={homeForRole(profile.role)} replace />;
   }
 

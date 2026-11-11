@@ -18,6 +18,7 @@ import TeacherExams from '@/pages/teacher/TeacherExams';
 import TeacherDoubts from '@/pages/teacher/TeacherDoubts';
 import TeacherAnnouncements from '@/pages/teacher/TeacherAnnouncements';
 import AdminDashboard from '@/pages/admin/AdminDashboard';
+import ProfilePage from '@/pages/ProfilePage';
 
 function HomeOrDashboard() {
   const { session, profile, loading } = useAuth();
@@ -57,6 +58,7 @@ export default function App() {
             <Route path="/teacher/doubts" element={<RequireRole role="teacher"><TeacherDoubts /></RequireRole>} />
             <Route path="/teacher/announcements" element={<RequireRole role="teacher"><TeacherAnnouncements /></RequireRole>} />
             <Route path="/admin" element={<RequireRole role="admin"><AdminDashboard /></RequireRole>} />
+            <Route path="/profile" element={<RequireRole><ProfilePage /></RequireRole>} />
             <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>
         </BrowserRouter>

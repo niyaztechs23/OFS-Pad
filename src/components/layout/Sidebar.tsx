@@ -3,42 +3,56 @@ import { Logo } from '@/components/Logo';
 import { type NavItem, type Role } from '@/data/nav';
 
 export function Sidebar({ items, role }: { items: NavItem[]; role: Role }) {
+  const groups = [
+    { key: 'workspace', label: 'Workspace' },
+    { key: 'connect', label: 'Connect' },
+    { key: 'account', label: 'Account' },
+  ] as const;
+
   return (
     <aside className="hidden md:flex flex-col w-60 shrink-0 border-r border-ink-100/70 dark:border-ink-700/60 bg-paper-card dark:bg-ink-900 px-4 py-6">
       <div className="px-2 mb-8">
         <Logo />
       </div>
 
-      <nav className="flex flex-col gap-1">
-        <p className="px-3 mb-1 text-xs font-semibold uppercase tracking-wider text-ink-300 dark:text-ink-200">
-          {role === 'student' ? 'Student' : role === 'teacher' ? 'Teacher' : 'Admin'}
-        </p>
-        {items.map((item) => {
-          const Icon = item.icon;
+      <nav className="flex flex-col gap-5">
+        {groups.map((group) => {
+          const groupItems = items.filter((item) => item.section === group.key);
+          if (groupItems.length === 0) return null;
           return (
-            <NavLink
-              key={item.to}
-              to={item.to}
-              end={item.to === '/student' || item.to === '/teacher' || item.to === '/admin'}
-              className={({ isActive }) =>
-                `flex items-center gap-3 px-3 h-11 rounded-xl text-sm font-heading font-semibold transition-colors min-h-[44px] ${
-                  isActive
-                    ? 'bg-ink-50 text-ink-600 dark:bg-ink-700 dark:text-white'
-                    : 'text-ink-400 hover:bg-ink-50/60 hover:text-ink-600 dark:text-ink-200 dark:hover:bg-ink-800 dark:hover:text-white'
-                }`
-              }
-            >
-              <Icon size={20} />
-              {item.label}
-            </NavLink>
+            <div key={group.key}>
+              <p className="px-3 mb-1.5 text-[11px] font-semibold uppercase tracking-[0.16em] text-ink-300 dark:text-ink-200">{group.label}</p>
+              <div className="flex flex-col gap-1">
+                {groupItems.map((item) => {
+                  const Icon = item.icon;
+                  return (
+                    <NavLink
+                      key={item.to}
+                      to={item.to}
+                      end={item.to === '/student' || item.to === '/teacher' || item.to === '/admin'}
+                      className={({ isActive }) =>
+                        `flex items-center gap-3 px-3 h-11 rounded-xl text-sm font-heading font-semibold transition-colors min-h-[44px] ${
+                          isActive
+                            ? 'bg-ink-50 text-ink-600 dark:bg-ink-700 dark:text-white'
+                            : 'text-ink-400 hover:bg-ink-50/60 hover:text-ink-600 dark:text-ink-200 dark:hover:bg-ink-800 dark:hover:text-white'
+                        }`
+                      }
+                    >
+                      <Icon size={20} />
+                      {item.label}
+                    </NavLink>
+                  );
+                })}
+              </div>
+            </div>
           );
         })}
       </nav>
 
       <div className="mt-auto px-3 pt-6">
         <div className="rounded-xl bg-leaf-50 dark:bg-ink-800 p-3 text-xs text-leaf-700 dark:text-leaf-100">
-          <p className="font-heading font-bold mb-0.5">Need a hand?</p>
-          <p className="opacity-80">Tap a subject notebook to review your notes.</p>
+          <p className="font-heading font-bold mb-0.5">Quick tip</p>
+          <p className="opacity-80">{role === 'student' ? 'Start with Home, then open a notebook or assignment.' : role === 'teacher' ? 'Start with Classes to organise your teaching workspace.' : 'Use Teacher approvals to manage school access.'}</p>
         </div>
       </div>
     </aside>

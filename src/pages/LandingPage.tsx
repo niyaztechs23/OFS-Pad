@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
 import { Logo } from '@/components/Logo';
 import { Button } from '@/components/ui/Button';
-import { Bell, MessageCircleQuestion, BookOpen, ArrowRight, Moon, Sun } from 'lucide-react';
+import { Bell, MessageCircleQuestion, BookOpen, ArrowRight, Moon, Sun, Compass } from 'lucide-react';
 import { useTheme } from '@/components/theme/ThemeProvider';
 
 export function LandingPage() {
@@ -72,6 +72,9 @@ export function LandingPage() {
             <Link to="/auth">
               <Button variant="outline" size="lg">I already have an account</Button>
             </Link>
+            <Link to="/intro" className="inline-flex items-center gap-2 px-1 text-sm font-semibold text-ink-400 hover:text-ink-600 dark:text-ink-200 dark:hover:text-white">
+              <Compass size={17} /> See how OFS Pad works
+            </Link>
           </div>
         </div>
 
@@ -123,7 +126,11 @@ export function LandingPage() {
       <footer className="max-w-6xl mx-auto px-5 sm:px-8 py-10 border-t border-ink-100/70 dark:border-ink-700/60 mt-6">
         <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
           <Logo size="sm" />
-          <p className="text-xs text-ink-300 dark:text-ink-200">OFS Pad · A calm place to study.</p>
+          <div className="flex flex-wrap items-center justify-center gap-4 text-xs text-ink-300 dark:text-ink-200">
+            <span>OFS Pad · A calm place to study.</span>
+            <Link to="/privacy" className="hover:text-ink-600 dark:hover:text-white">Privacy Policy</Link>
+            <Link to="/terms" className="hover:text-ink-600 dark:hover:text-white">Terms &amp; Conditions</Link>
+          </div>
         </div>
       </footer>
     </div>

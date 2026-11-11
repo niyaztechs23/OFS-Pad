@@ -5,6 +5,7 @@ import { BottomTabBar } from './BottomTabBar';
 import { type NavItem, type Role } from '@/data/nav';
 import { type Notification } from '@/data/mock';
 import { useAuth } from '@/components/auth/AuthProvider';
+import { WelcomeTour } from '@/components/onboarding/WelcomeTour';
 
 export function AppShell({
   role,
@@ -32,6 +33,7 @@ export function AppShell({
         </main>
       </div>
       <BottomTabBar items={nav} />
+      <WelcomeTour role={role} />
     </div>
   );
 }

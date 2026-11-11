@@ -19,6 +19,8 @@ import TeacherDoubts from '@/pages/teacher/TeacherDoubts';
 import TeacherAnnouncements from '@/pages/teacher/TeacherAnnouncements';
 import AdminDashboard from '@/pages/admin/AdminDashboard';
 import ProfilePage from '@/pages/ProfilePage';
+import IntroPage from '@/pages/IntroPage';
+import LegalPage from '@/pages/LegalPage';
 
 function HomeOrDashboard() {
   const { session, profile, loading } = useAuth();
@@ -44,6 +46,9 @@ export default function App() {
           <Routes>
             <Route path="/" element={<HomeOrDashboard />} />
             <Route path="/auth" element={<AuthOrRedirect />} />
+            <Route path="/intro" element={<IntroPage />} />
+            <Route path="/privacy" element={<LegalPage kind="privacy" />} />
+            <Route path="/terms" element={<LegalPage kind="terms" />} />
             <Route path="/student" element={<RequireRole role="student"><StudentDashboard /></RequireRole>} />
             <Route path="/student/notebooks" element={<RequireRole role="student"><StudentNotebooks /></RequireRole>} />
             <Route path="/student/notebooks/:id" element={<RequireRole role="student"><NotebookEditor /></RequireRole>} />

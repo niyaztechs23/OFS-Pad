@@ -2,6 +2,9 @@
   "routes": [
     { "path": "/", "title": "OFS Pad" },
     { "path": "/auth", "title": "Sign in to OFS Pad" },
+    { "path": "/intro", "title": "How OFS Pad works" },
+    { "path": "/privacy", "title": "OFS Pad Privacy Policy" },
+    { "path": "/terms", "title": "OFS Pad Terms & Conditions" },
     { "path": "/student", "title": "Student dashboard" },
     { "path": "/student/notebooks", "title": "Student notebooks" },
     { "path": "/student/notebooks/:id", "title": "Notebook editor" },

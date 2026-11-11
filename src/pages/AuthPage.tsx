@@ -186,6 +186,9 @@ export function AuthPage() {
               ? 'New here? Switch to Sign up to create an account.'
               : 'Already have an account? Switch to Log in.'}
           </p>
+          <p className="text-center text-xs text-ink-300 dark:text-ink-300 mt-3">
+            By continuing, you acknowledge the <Link to="/privacy" className="underline hover:text-ink-600 dark:hover:text-white">Privacy Policy</Link> and <Link to="/terms" className="underline hover:text-ink-600 dark:hover:text-white">Terms &amp; Conditions</Link>.
+          </p>
         </div>
       </div>
     </div>

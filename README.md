@@ -19,6 +19,8 @@ The detailed notes are separated by workflow in the [`docs/`](./docs) directory:
 - [`DEPLOYMENT.md`](./docs/DEPLOYMENT.md) — Vercel, Supabase, Google Cloud, and release checklist
 - [`TROUBLESHOOTING.md`](./docs/TROUBLESHOOTING.md) — common auth, routing, notebook, realtime, and build problems
 - [`PROJECT_MAP.md`](./docs/PROJECT_MAP.md) — source-code map and recommended change flow
+- `/intro` — public guide explaining how students, teachers, and administrators use OFS Pad
+- `/privacy` and `/terms` — in-app policy pages linked from the landing and authentication screens
 
 ## Run locally
 
@@ -81,6 +83,10 @@ Every signed-in user has a profile dashboard at `/profile`, reachable from the a
 Password fields on the sign-in and sign-up screens include a visible **eye** button that switches between hidden and visible text, so students can check what they typed before submitting. Passwords are still masked by default and are never stored in the app.
 
 The OFS Pad logo supplied for the project is used across the app, sign-in screen, favicons, installed-app icons, and social preview. Brand assets live in `public/ofs-pad-*.png`.
+
+## Navigation and first visit
+
+Signed-in navigation is organised into **Workspace**, **Connect**, and **Account** groups on desktop. Mobile navigation is intentionally limited to the highest-value destinations so the bottom bar stays readable. On a user's first signed-in visit, a short role-specific introduction tour explains the main sections and links to the full `/intro` guide. The tour can be dismissed and is remembered in the browser.
 
 ## Deployment
 

@@ -2,10 +2,12 @@ import { NavLink } from 'react-router-dom';
 import { type NavItem } from '@/data/nav';
 
 export function BottomTabBar({ items }: { items: NavItem[] }) {
+  const mobileItems = items.filter((item) => item.mobile);
+
   return (
     <nav className="md:hidden fixed bottom-0 inset-x-0 z-30 bg-paper-card dark:bg-ink-900 border-t border-ink-100 dark:border-ink-700 px-2 pt-1.5 pb-[max(0.5rem,env(safe-area-inset-bottom))]">
       <ul className="flex items-stretch justify-around">
-        {items.map((item) => {
+        {mobileItems.map((item) => {
           const Icon = item.icon;
           return (
             <li key={item.to} className="flex-1">

@@ -48,6 +48,11 @@ export function AuthPage() {
           setBusy(false);
           return;
         }
+        if (password.length < 8) {
+          setError('Use at least 8 characters for your password.');
+          setBusy(false);
+          return;
+        }
         const { error: err } = await supabase.auth.signUp({
           email,
           password,

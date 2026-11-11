@@ -6,6 +6,7 @@ import {
   CheckCircle2,
   ClipboardList,
   GraduationCap,
+  Globe,
   KeyRound,
   LogOut,
   Mail,
@@ -168,7 +169,7 @@ export default function ProfilePage() {
       : role === 'admin'
       ? [
           { label: 'Teacher approvals', to: '/admin', icon: <ShieldCheck size={18} /> },
-          { label: 'Student home', to: '/student', icon: <BookOpen size={18} /> },
+          { label: 'Public home', to: '/', icon: <Globe size={18} /> },
         ]
       : [
           { label: 'My notebooks', to: '/student/notebooks', icon: <BookOpen size={18} /> },

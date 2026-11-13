@@ -2,7 +2,7 @@
 
 This script matches the ten-slide deck **OFS Pad — Ideathon Product Story** (file: `OFS_Pad_Ideathon_Product_Story.pptx`). Each section gives the one line you must land, the three points to say out loud, and the sentence that carries the audience to the next slide.
 
-Timing guide: 6–7 minutes for the full script, 3 minutes for the short version (marked with ★), and 30 seconds for the elevator version at the end.
+Timing guide: about 8 minutes for the full script before questions or the live demo, 3 minutes for the short version, and 30 seconds for the elevator version at the end.
 
 Rules for the presenter:
 

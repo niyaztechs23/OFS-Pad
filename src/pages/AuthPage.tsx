@@ -21,6 +21,7 @@ export function AuthPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState<string | null>(null);
+  const [notice, setNotice] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
 
   // If already signed in, redirect to the right dashboard
@@ -40,6 +41,7 @@ export function AuthPage() {
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
+    setNotice(null);
     setBusy(true);
     try {
       if (mode === 'signup') {
@@ -53,13 +55,16 @@ export function AuthPage() {
           setBusy(false);
           return;
         }
-        const { error: err } = await supabase.auth.signUp({
+        const { data, error: err } = await supabase.auth.signUp({
           email,
           password,
           options: { data: { full_name: fullName.trim(), role } },
         });
         if (err) throw err;
-        // Email confirmation is off; onAuthStateChange will fire and trigger redirect
+        if (!data.session) {
+          setBusy(false);
+          setNotice('Account created. Check your email to confirm your account, then return here to log in.');
+        }
       } else {
         const { error: err } = await supabase.auth.signInWithPassword({ email, password });
         if (err) throw err;
@@ -163,6 +168,11 @@ export function AuthPage() {
             {error && (
               <p className="text-sm text-clay-600 dark:text-clay-100 bg-clay-50 dark:bg-clay-500/20 rounded-lg px-3 py-2">
                 {error}
+              </p>
+            )}
+            {notice && (
+              <p className="text-sm text-leaf-700 dark:text-leaf-100 bg-leaf-50 dark:bg-ink-700/60 rounded-lg px-3 py-2">
+                {notice}
               </p>
             )}
 

@@ -18,7 +18,7 @@ export function NotebookEditor() {
   const { id } = useParams();
   const navigate = useNavigate();
   const { session, profile } = useAuth();
-  const { notebooks, ready, saveError, savedAt, update, remove } = useNotebooks(session?.userId);
+  const { notebooks, ready, saveError, savedAt, syncState, update, remove } = useNotebooks(session?.userId);
   const [pageIndex, setPageIndex] = useState(0);
   const [showSubmit, setShowSubmit] = useState(false);
 
@@ -110,9 +110,9 @@ export function NotebookEditor() {
           <div className="flex items-center gap-2 flex-wrap">
             <span className="text-xs flex items-center gap-1 text-ink-300 dark:text-ink-200">
               {saveError ? (
-                <><AlertCircle size={14} className="text-clay-500" /> Couldn't save (storage full?)</>
+                <><AlertCircle size={14} className="text-clay-500" /> Cloud sync paused; saved locally</>
               ) : (
-                <><Check size={14} className="text-leaf-500" /> {savedAt ? 'Saved on this device' : 'Autosaves on this device'}</>
+                <><Check size={14} className="text-leaf-500" /> {syncState === 'syncing' ? 'Syncing to cloud…' : savedAt ? 'Saved to OFS Pad cloud' : 'Autosaves to cloud'}</>
               )}
             </span>
             {!nb.isRough && (

@@ -15,7 +15,7 @@ import { Plus, Lock, X } from 'lucide-react';
 export function StudentNotebooks() {
   const { session, profile } = useAuth();
   const navigate = useNavigate();
-  const { notebooks, ready, add } = useNotebooks(session?.userId);
+  const { notebooks, ready, syncState, add } = useNotebooks(session?.userId);
   const [filter, setFilter] = useState<SubjectKey | 'all'>('all');
   const [showNew, setShowNew] = useState(false);
 
@@ -31,6 +31,9 @@ export function StudentNotebooks() {
           <div>
             <h1 className="font-heading font-extrabold text-2xl text-ink-600 dark:text-white">My Notebooks</h1>
             <p className="text-ink-400 dark:text-ink-200 mt-1">All your subject notes in one pad.</p>
+            <p className="text-xs text-ink-300 dark:text-ink-300 mt-2" role="status">
+              {syncState === 'synced' ? 'Cloud synced across your signed-in devices.' : syncState === 'offline' ? 'Offline mode: changes are saved on this device and will sync when available.' : syncState === 'syncing' ? 'Syncing your latest changes…' : 'Connecting to your cloud notebook…'}
+            </p>
           </div>
           <Button size="md" onClick={() => setShowNew(true)}><Plus size={16} /> New notebook</Button>
         </div>

@@ -338,7 +338,7 @@ export default function ProfilePage() {
 
         {isStudent && (
           <p className="text-center text-xs text-ink-300 dark:text-ink-300 flex items-center justify-center gap-1.5 pb-2">
-            <BookOpen size={12} /> {notebooks.length} notebook{notebooks.length === 1 ? '' : 's'} saved on this device
+            <BookOpen size={12} /> {notebooks.length} notebook{notebooks.length === 1 ? '' : 's'} synced to your OFS Pad account
           </p>
         )}
       </div>

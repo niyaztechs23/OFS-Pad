@@ -436,7 +436,23 @@ Only the publishable anon key belongs in the browser. A service-role key must ne
 
 ### `src/lib/notebookStore.ts`
 
-This stores the current notebook state used by the notebook experience. The current project documentation notes that notebook state is browser-local rather than a full cross-device cloud notebook system.
+This file defines the notebook data model and converts between the app shape and the database row. A notebook has an id, title, subject, a rough-note flag, a revision counter, timestamps, and a list of pages; each page holds typed text and pen strokes.
+
+Two helpers keep the two storage layers in sync:
+
+- `loadLocalNotebooks` / `saveLocalNotebooks` read and write a per-user browser cache. This keeps writing instant and lets the editor work offline.
+- `notebookToRow` / `rowToNotebook` translate between the app object and a `public.notebooks` row, where pages are stored as JSON.
+
+Older local notebooks used non-UUID ids, so `normaliseNotebook` upgrades them to real UUIDs on read. That is what allows a device notebook to be uploaded to Postgres without breaking ownership.
+
+`src/hooks/useNotebooks.ts` performs the actual synchronisation:
+
+1. Load the local cache so the UI can render immediately.
+2. Fetch the signed-in student's rows from `public.notebooks`.
+3. If the cloud is empty but the device has notebooks, upload them once.
+4. If the device has notebooks the cloud does not, upload those too.
+5. Debounce edits, write the local cache, then upsert to Postgres.
+6. Report a `syncState` of `loading`, `syncing`, `synced` or `offline` so the interface can be honest about what happened.
 
 ### `supabase/migrations/`
 

@@ -107,7 +107,7 @@ export function AuthPage() {
         </Link>
       </div>
 
-      <main className="flex-1 px-5 py-8 sm:px-8 sm:py-12">
+      <main className="flex-1 px-5 py-8 sm:px-8 sm:py-12 lg:py-6">
         <div className="mx-auto grid w-full max-w-6xl items-center gap-10 lg:grid-cols-[minmax(0,1fr)_minmax(420px,480px)] lg:gap-16">
           <section className="hidden lg:block">
             <span className="inline-flex items-center gap-2 rounded-full bg-leaf-50 dark:bg-leaf-700/30 px-3 py-1 text-xs font-semibold text-leaf-700 dark:text-leaf-100">
@@ -126,9 +126,9 @@ export function AuthPage() {
             </div>
           </section>
 
-          <section className="w-full rounded-3xl border border-ink-100 bg-white p-6 shadow-card dark:border-ink-700 dark:bg-ink-800 sm:p-8">
-            <div className="text-center mb-7">
-            <LogoFull className="w-20 h-20 mx-auto mb-4" />
+          <section className="w-full rounded-3xl border border-ink-100 bg-white p-6 shadow-card dark:border-ink-700 dark:bg-ink-800 sm:p-8 lg:p-6">
+            <div className="text-center mb-7 lg:mb-4">
+            <LogoFull className="w-20 h-20 mx-auto mb-4 lg:w-16 lg:h-16 lg:mb-3" />
             <h1 className="font-heading font-extrabold text-2xl text-ink-600 dark:text-white">
               {mode === 'login' ? 'Welcome back' : 'Create your account'}
             </h1>
@@ -138,7 +138,7 @@ export function AuthPage() {
           </div>
 
           {/* Mode tabs */}
-          <div className="grid grid-cols-2 gap-1 p-1 bg-ink-100/70 dark:bg-ink-800 rounded-xl mb-6">
+          <div className="grid grid-cols-2 gap-1 p-1 bg-ink-100/70 dark:bg-ink-800 rounded-xl mb-6 lg:mb-4">
             {(['login', 'signup'] as const).map((m) => (
               <button
                 key={m}
@@ -154,7 +154,7 @@ export function AuthPage() {
             ))}
           </div>
 
-          <form onSubmit={submit} className="space-y-4">
+          <form onSubmit={submit} className="space-y-4 lg:space-y-3">
             {mode === 'signup' && (
               <Field
                 icon={<User size={18} />}
@@ -199,7 +199,7 @@ export function AuthPage() {
             </Button>
           </form>
 
-          <div className="flex items-center gap-3 my-5">
+          <div className="flex items-center gap-3 my-5 lg:my-4">
             <span className="h-px flex-1 bg-ink-100 dark:bg-ink-700" />
             <span className="text-xs text-ink-300 dark:text-ink-300">or</span>
             <span className="h-px flex-1 bg-ink-100 dark:bg-ink-700" />
@@ -209,12 +209,12 @@ export function AuthPage() {
             <Chrome size={18} /> Continue with Google
           </Button>
 
-          <p className="text-center text-xs text-ink-300 dark:text-ink-300 mt-5">
+          <p className="text-center text-xs text-ink-300 dark:text-ink-300 mt-5 lg:mt-4">
             {mode === 'login'
               ? 'New here? Switch to Sign up to create an account.'
               : 'Already have an account? Switch to Log in.'}
           </p>
-            <p className="text-center text-xs text-ink-300 dark:text-ink-300 mt-3">
+            <p className="text-center text-xs text-ink-300 dark:text-ink-300 mt-3 lg:mt-2">
               By continuing, you acknowledge the <Link to="/privacy" className="underline hover:text-ink-600 dark:hover:text-white">Privacy Policy</Link> and <Link to="/terms" className="underline hover:text-ink-600 dark:hover:text-white">Terms &amp; Conditions</Link>.
             </p>
           </section>

@@ -183,7 +183,7 @@ export function StudentDashboard() {
         </section>
 
         <p className="text-center text-xs text-ink-300 dark:text-ink-300 pt-2 flex items-center justify-center gap-1">
-          <Sparkles size={12} /> The Doubt Wall is live; exam scheduling will connect here next.
+          <Sparkles size={12} /> Your classes, notebooks, assignments, doubts, announcements, and exams stay in one workspace.
         </p>
       </div>
 

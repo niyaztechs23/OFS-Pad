@@ -327,8 +327,8 @@ export function PageEditor({
 
       <div className="grid xl:grid-cols-[minmax(0,1fr)_17rem] gap-4 items-start">
         {/* One page: ruled paper + typed text + handwriting together */}
-        <div className="overflow-x-auto rounded-xl min-w-0">
-          <div className="max-w-[820px]" style={{ width: `${zoom * 100}%` }}>
+        <div className="overflow-x-auto rounded-xl min-w-0 max-w-full">
+          <div className="w-full max-w-[820px] min-w-0" style={{ width: `${zoom * 100}%` }}>
             <div className="relative w-full rounded-xl shadow-card overflow-hidden" style={PAPER_STYLE}>
               <div className="absolute inset-0" style={RULES_STYLE} />
               <div className="absolute top-0 bottom-0" style={{ left: MARGIN_LEFT, width: 1, backgroundColor: 'rgba(209,73,91,0.45)' }} />

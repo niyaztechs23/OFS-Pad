@@ -100,7 +100,7 @@ export function AuthPage() {
 
   return (
     <div className="min-h-screen bg-paper dark:bg-ink-900 flex flex-col">
-      <div className="px-5 sm:px-8 py-5 max-w-6xl mx-auto w-full flex items-center justify-between">
+      <div className="px-5 sm:px-8 py-4 lg:py-3 max-w-6xl mx-auto w-full flex items-center justify-between">
         <Logo />
         <Link to="/" className="inline-flex items-center gap-1 text-sm font-semibold text-ink-400 hover:text-ink-600 dark:text-ink-200 dark:hover:text-white">
           <ArrowLeft size={16} /> Back
@@ -126,7 +126,7 @@ export function AuthPage() {
             </div>
           </section>
 
-          <section className="w-full rounded-3xl border border-ink-100 bg-white p-6 shadow-card dark:border-ink-700 dark:bg-ink-800 sm:p-8 lg:p-6">
+          <section className="w-full rounded-3xl border border-ink-100 bg-white p-6 shadow-card dark:border-ink-700 dark:bg-ink-800 sm:p-8 lg:p-5">
             <div className="text-center mb-7 lg:mb-4">
             <LogoFull className="w-20 h-20 mx-auto mb-4 lg:w-16 lg:h-16 lg:mb-3" />
             <h1 className="font-heading font-extrabold text-2xl text-ink-600 dark:text-white">
@@ -143,7 +143,7 @@ export function AuthPage() {
               <button
                 key={m}
                 onClick={() => { setMode(m); setError(null); }}
-                className={`h-11 rounded-lg font-heading font-semibold text-sm transition-colors ${
+                className={`h-11 lg:h-10 rounded-lg font-heading font-semibold text-sm transition-colors ${
                   mode === m
                     ? 'bg-white dark:bg-ink-700 text-ink-600 dark:text-white shadow-sm'
                     : 'text-ink-400 dark:text-ink-200'
@@ -261,7 +261,7 @@ function Field({
           value={value}
           onChange={(e) => onChange(e.target.value)}
           required={required}
-          className="w-full h-12 pl-11 pr-4 rounded-xl bg-white dark:bg-ink-800 border border-ink-100 dark:border-ink-700 text-ink-600 dark:text-white placeholder:text-ink-300 focus:outline-none focus:border-ink-400 focus:ring-2 focus:ring-ink-100 dark:focus:ring-ink-700 transition-colors"
+          className="w-full h-12 lg:h-11 pl-11 pr-4 rounded-xl bg-white dark:bg-ink-800 border border-ink-100 dark:border-ink-700 text-ink-600 dark:text-white placeholder:text-ink-300 focus:outline-none focus:border-ink-400 focus:ring-2 focus:ring-ink-100 dark:focus:ring-ink-700 transition-colors"
         />
       </span>
     </label>

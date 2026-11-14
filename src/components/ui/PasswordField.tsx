@@ -36,7 +36,7 @@ export function PasswordField({
           onChange={(e) => onChange(e.target.value)}
           required={required}
           autoComplete={autoComplete}
-          className="w-full h-12 pl-11 pr-12 rounded-xl bg-white dark:bg-ink-800 border border-ink-100 dark:border-ink-700 text-ink-600 dark:text-white placeholder:text-ink-300 focus:outline-none focus:border-ink-400 focus:ring-2 focus:ring-ink-100 dark:focus:ring-ink-700 transition-colors"
+          className="w-full h-12 lg:h-11 pl-11 pr-12 rounded-xl bg-white dark:bg-ink-800 border border-ink-100 dark:border-ink-700 text-ink-600 dark:text-white placeholder:text-ink-300 focus:outline-none focus:border-ink-400 focus:ring-2 focus:ring-ink-100 dark:focus:ring-ink-700 transition-colors"
         />
         <button
           type="button"

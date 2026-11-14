@@ -3,7 +3,7 @@ import { useSearchParams, Link } from 'react-router-dom';
 import { Logo, LogoFull } from '@/components/Logo';
 import { Button } from '@/components/ui/Button';
 import { PasswordField } from '@/components/ui/PasswordField';
-import { ArrowLeft, Mail, User, Chrome } from 'lucide-react';
+import { ArrowLeft, Mail, User, Chrome, CheckCircle2, Cloud, ShieldCheck } from 'lucide-react';
 import { supabase } from '@/lib/supabase';
 import { useAuth } from '@/components/auth/AuthProvider';
 
@@ -107,9 +107,27 @@ export function AuthPage() {
         </Link>
       </div>
 
-      <div className="flex-1 grid place-items-center px-5 py-8">
-        <div className="w-full max-w-md">
-          <div className="text-center mb-7">
+      <main className="flex-1 px-5 py-8 sm:px-8 sm:py-12">
+        <div className="mx-auto grid w-full max-w-6xl items-center gap-10 lg:grid-cols-[minmax(0,1fr)_minmax(420px,480px)] lg:gap-16">
+          <section className="hidden lg:block">
+            <span className="inline-flex items-center gap-2 rounded-full bg-leaf-50 dark:bg-leaf-700/30 px-3 py-1 text-xs font-semibold text-leaf-700 dark:text-leaf-100">
+              <span className="h-2 w-2 rounded-full bg-leaf-500" /> Calm, focused schoolwork
+            </span>
+            <h1 className="mt-6 max-w-xl font-heading text-5xl font-extrabold leading-[1.08] tracking-tight text-ink-600 dark:text-white">
+              Carry knowledge,<br />not notebooks.
+            </h1>
+            <p className="mt-5 max-w-lg text-lg leading-relaxed text-ink-400 dark:text-ink-200">
+              Classes, cloud notebooks, assignments and doubts — organised in one secure place for your school day.
+            </p>
+            <div className="mt-8 grid max-w-lg gap-3 sm:grid-cols-3">
+              <AuthBenefit icon={<Cloud size={18} />} label="Cloud notebooks" />
+              <AuthBenefit icon={<CheckCircle2 size={18} />} label="Clear deadlines" />
+              <AuthBenefit icon={<ShieldCheck size={18} />} label="Role-based access" />
+            </div>
+          </section>
+
+          <section className="w-full rounded-3xl border border-ink-100 bg-white p-6 shadow-card dark:border-ink-700 dark:bg-ink-800 sm:p-8">
+            <div className="text-center mb-7">
             <LogoFull className="w-20 h-20 mx-auto mb-4" />
             <h1 className="font-heading font-extrabold text-2xl text-ink-600 dark:text-white">
               {mode === 'login' ? 'Welcome back' : 'Create your account'}
@@ -196,11 +214,21 @@ export function AuthPage() {
               ? 'New here? Switch to Sign up to create an account.'
               : 'Already have an account? Switch to Log in.'}
           </p>
-          <p className="text-center text-xs text-ink-300 dark:text-ink-300 mt-3">
-            By continuing, you acknowledge the <Link to="/privacy" className="underline hover:text-ink-600 dark:hover:text-white">Privacy Policy</Link> and <Link to="/terms" className="underline hover:text-ink-600 dark:hover:text-white">Terms &amp; Conditions</Link>.
-          </p>
+            <p className="text-center text-xs text-ink-300 dark:text-ink-300 mt-3">
+              By continuing, you acknowledge the <Link to="/privacy" className="underline hover:text-ink-600 dark:hover:text-white">Privacy Policy</Link> and <Link to="/terms" className="underline hover:text-ink-600 dark:hover:text-white">Terms &amp; Conditions</Link>.
+            </p>
+          </section>
         </div>
-      </div>
+      </main>
+    </div>
+  );
+}
+
+function AuthBenefit({ icon, label }: { icon: React.ReactNode; label: string }) {
+  return (
+    <div className="flex items-center gap-2 rounded-xl border border-ink-100 bg-white/70 px-3 py-3 text-xs font-semibold text-ink-500 dark:border-ink-700 dark:bg-ink-800/70 dark:text-ink-100">
+      <span className="text-leaf-600 dark:text-leaf-100">{icon}</span>
+      <span>{label}</span>
     </div>
   );
 }
